@@ -1,7 +1,6 @@
 package initprosesing.core;
 
 import arc.*;
-import mindustry.mod.*;
 import arc.util.*;
 import arc.util.Time;
 import arc.graphics.g2d.TextureRegion;
@@ -16,50 +15,37 @@ public class CoreMenuBackground {
     static int index = 0;
     static float timer = 0f;
 
-    static float speed = 0.08f; // 🔥 atur kecepatan animasi
-
- public class CoreMenuBackground {
-
-    static TextureRegion[] frames;
-    static int index = 0;
-    static float timer = 0f;
-
     static float speed = 0.08f;
 
     public static void init(){
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
 
-            Core.app.post(() -> { // 🔥 pastikan atlas sudah ready
+            Core.app.post(() -> {
 
                 Log.info("INIT MENU BACKGROUND");
 
                 int total = 99;
                 frames = new TextureRegion[total];
 
-                // ===== LOAD FRAME =====
                 for(int i = 0; i < total; i++){
                     String name = String.format("bg/ezgif-frame-%03d", i + 1);
 
                     TextureRegion region = Core.atlas.find(name);
 
-                    if(region == null || region.found() == false){
+                    if(region == null || !region.found()){
                         Log.err("❌ Frame tidak ditemukan: " + name);
-                    }else{
-                        Log.info("✅ Loaded: " + name);
                     }
 
                     frames[i] = region;
                 }
 
-                // ===== IMAGE =====
                 Image bg = new Image();
                 bg.setFillParent(true);
 
                 Vars.ui.menuGroup.addChild(bg);
                 bg.toBack();
 
-                // ===== LOOP =====
                 Events.run(EventType.Trigger.update, () -> {
 
                     timer += Time.delta;
@@ -80,5 +66,4 @@ public class CoreMenuBackground {
             });
         });
     }
-}
 }
