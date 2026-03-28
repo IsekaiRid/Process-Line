@@ -24,8 +24,7 @@ public class CoreHUD {
 
             // background card
             card.setBackground(Styles.black6);
-            card.height(200)
-            card.width(200)
+            ard.setSize(300f, 150f)
 
             card.defaults().pad(5);
 
