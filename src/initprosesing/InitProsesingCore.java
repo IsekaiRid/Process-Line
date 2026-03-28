@@ -1,6 +1,7 @@
 package initprosesing;
 
 import mindustry.mod.*;
+import arc.util.Log;
 
 public class InitProsesingCore extends Mod {
 
