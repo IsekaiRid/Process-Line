@@ -17,13 +17,15 @@ public class CoreHUD {
 
             Table root = new Table();
             root.setFillParent(true);
-            root.top().right();
+            root.center();
 
             // CARD
             Table card = new Table();
 
             // background card
             card.setBackground(Styles.black6);
+            card.height(200)
+            card.width(200)
 
             card.defaults().pad(5);
 
