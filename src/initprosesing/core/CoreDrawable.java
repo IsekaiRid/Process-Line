@@ -13,10 +13,22 @@ public class CoreDrawable implements Drawable {
         this.color = color;
     }
 
+    // ===== DRAW BASIC =====
     @Override
     public void draw(float x, float y, float width, float height){
         CoreDraw.shadow(x, y, width, height);
         CoreDraw.softRect(x, y, width, height, color);
+    }
+
+    // ===== DRAW ADVANCED (WAJIB!) =====
+    @Override
+    public void draw(float x, float y, float originX, float originY,
+                     float width, float height,
+                     float scaleX, float scaleY,
+                     float rotation){
+
+        // kita abaikan transform, pakai basic draw saja
+        draw(x, y, width, height);
     }
 
     // ===== SIZE =====
