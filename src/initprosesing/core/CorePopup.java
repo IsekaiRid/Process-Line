@@ -4,6 +4,8 @@ import arc.*;
 import arc.scene.actions.Actions;
 import arc.scene.ui.layout.*;
 import mindustry.ui.Styles;
+import arc.graphics.Color;
+import initprosesing.core.CoreDrawable;
 
 public class CorePopup {
 
@@ -14,8 +16,9 @@ public class CorePopup {
         root.center();
 
         Table card = new Table();
-        card.setBackground(Styles.black6);
-        card.setRound(true);
+        card.setBackground(
+            new CoreDrawable(12f, Color.valueOf("1e1e1e"))
+        );
 
         card.defaults().pad(6);
 
