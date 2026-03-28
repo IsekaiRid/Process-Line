@@ -31,7 +31,7 @@ public class CoreMenuBackground {
                 // ===== LOAD FRAME =====
                 for(int i = 0; i < total; i++){
 
-                    String name = String.format("bg/ezgif-frame-%03d", i + 1);
+                    String name = String.format("bg/ezgif-frame-%03d.png", i + 1);
 
                     TextureRegion region = Core.atlas.find(name);
 
