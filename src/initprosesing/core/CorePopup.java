@@ -5,7 +5,7 @@ import arc.scene.actions.Actions;
 import arc.scene.ui.layout.*;
 import mindustry.ui.Styles;
 import arc.graphics.Color;
-import initprosesing.core.CoreDrawable;
+import initprosesing.core.PopDialog;
 
 public class CorePopup {
 
@@ -17,8 +17,9 @@ public class CorePopup {
 
         Table card = new Table();
        card.setBackground(
-    new CoreDrawable(12f, Color.valueOf("1e1e1e"))
-); 
+    new PopDialog(12f, Color.valueOf("1e1e1e"), 300f, 800f)
+    );
+
         card.defaults().pad(6);
 
         card.add("[lightgray]==== Info Mod ==== []").row();
