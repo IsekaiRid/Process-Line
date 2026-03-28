@@ -24,7 +24,7 @@ public class CoreHUD {
 
             // background card
             card.setBackground(Styles.black6);
-            card.setSize(300f, 150f);
+            card.setRound(true);
 
             card.defaults().pad(5);
 
