@@ -13,10 +13,7 @@ public class InitProsesingCore extends Mod {
 
     @Override
     public void loadContent(){
-        Log.info("Loading InitProsesingCore content...");
-
-        // panggil sistem core
-        // CoreUI.init();
-        CoreHUD.init(); 
+    Log.info("Loading InitProsesingCore content...");
+    CoreHUD.init();
     }
 }
