@@ -2,6 +2,7 @@ package initprosesing.core;
 
 import arc.*;
 import arc.files.Fi;
+import arc.graphics.g2d.AtlasRegion;  // 🔥 TAMBAHKAN INI
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.scene.style.TextureRegionDrawable;
@@ -35,9 +36,8 @@ public class CoreMenuBackground {
                     String[] possibleNames = {
                         String.format("bg/set (%d)", i + 1),      // "bg/set (1)"  ← kemungkinan besar ini
                         String.format("bg/set(%d)", i + 1),       // "bg/set(1)"
-                        String.format("bg/set-%d", i + 1),      // "bg/set-1"
+                        String.format("bg/set-%d", i + 1),        // "bg/set-1"
                         String.format("bg/set_%d", i + 1),        // "bg/set_1"
-                        String.format("bg/set.%d", i + 1),        // "bg/set.1"
                     };
 
                     TextureRegion region = null;
@@ -156,7 +156,8 @@ public class CoreMenuBackground {
         Log.info("=== DEBUG ATLAS (semua region dengan 'bg') ===");
         
         int count = 0;
-        for (TextureRegion region : Core.atlas.getRegions()) {
+        // 🔥 PERBAIKAN: Gunakan AtlasRegion bukan TextureRegion
+        for (AtlasRegion region : Core.atlas.getRegions()) {
             if (region.name != null && region.name.toLowerCase().contains("bg")) {
                 Log.info("🎯 ATLAS: " + region.name + " | found=" + region.found() + 
                          " | width=" + region.width + " | height=" + region.height);
@@ -169,24 +170,6 @@ public class CoreMenuBackground {
         
         if (count == 0) {
             Log.warn("⚠️ Tidak ada region dengan 'bg' di atlas!");
-        }
-    }
-
-    // 🔥 DEBUG: Coba load texture langsung dari file (bypass atlas)
-    public static void debugDirectLoad() {
-        Log.info("=== DEBUG DIRECT FILE LOAD ===");
-        
-        for (int i = 1; i <= 5; i++) { // Test 5 frame pertama
-            String[] possiblePaths = {
-                String.format("sprites/bg/set (%d).png", i),
-                String.format("assets/sprites/bg/set (%d).png", i),
-                String.format("bg/set (%d).png", i)
-            };
-            
-            for (String path : possiblePaths) {
-                Fi file = Core.files.internal(path);
-                Log.info("🔍 Checking: " + path + " | exists=" + file.exists());
-            }
         }
     }
 }
