@@ -1,14 +1,12 @@
 package initprosesing.core;
 
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
 import arc.scene.style.Drawable;
 
 public class CoreDrawable implements Drawable {
 
-    float radius;
-    Color color;
+    private float radius;
+    private Color color;
 
     public CoreDrawable(float radius, Color color){
         this.radius = radius;
@@ -18,16 +16,11 @@ public class CoreDrawable implements Drawable {
     @Override
     public void draw(float x, float y, float width, float height){
 
-        Draw.color(color);
+        // shadow dulu
+        CoreDraw.shadow(x, y, width, height);
 
-        Fill.rect(
-            x + width/2f,
-            y + height/2f,
-            width,
-            height
-        );
-
-        Draw.color();
+        // background
+        CoreDraw.softRect(x, y, width, height, color);
     }
 
     @Override public float getMinWidth(){ return 0; }

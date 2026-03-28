@@ -16,10 +16,9 @@ public class CorePopup {
         root.center();
 
         Table card = new Table();
-        card.setBackground(
-            new CoreDrawable(12f, Color.valueOf("1e1e1e"))
-        );
-
+       card.setBackground(
+    new CoreDrawable(12f, Color.valueOf("1e1e1e"))
+); 
         card.defaults().pad(6);
 
         card.add("[lightgray]==== Info Mod ==== []").row();
