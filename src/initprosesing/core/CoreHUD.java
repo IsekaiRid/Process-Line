@@ -1,8 +1,8 @@
 package initprosesing.core;
 
-import arc.Events;
+import arc.*;
 import arc.scene.ui.layout.*;
-import mindustry.Vars;
+import arc.util.*;
 import mindustry.game.EventType.*;
 
 public class CoreHUD {
@@ -11,7 +11,12 @@ public class CoreHUD {
 
         Events.on(ClientLoadEvent.class, e -> {
 
+            Log.info("HUD INIT DIPANGGIL");
+
             Table table = new Table();
+
+            // WAJIB!!!
+            table.setFillParent(true);
 
             table.top().right();
             table.margin(10);
@@ -25,7 +30,7 @@ public class CoreHUD {
             table.add("Status: [green]Active[]")
                 .padTop(5);
 
-            Vars.ui.hudGroup.addChild(table);
+            Core.scene.add(table);
         });
     }
 }
