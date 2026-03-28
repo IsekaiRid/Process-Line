@@ -1,9 +1,9 @@
 package initprosesing.core;
 
-import arc.*;
+import arc.Events;
+import arc.scene.ui.layout.*;
 import arc.util.*;
 import mindustry.game.EventType.*;
-import mindustry.mod.*;
 import mindustry.ui.dialogs.*;
 
 public class CoreUI {
@@ -14,20 +14,34 @@ public class CoreUI {
         Events.on(ClientLoadEvent.class, e -> {
             Time.runTask(10f, () -> {
 
-                BaseDialog dialog = new BaseDialog("Init Prosesing Core");
+                BaseDialog dialog = new BaseDialog("");
+                dialog.clear();
 
-                // teks utama
-                dialog.cont.add("[accent]Hallo[]").pad(10f).row();
+                // buat card di tengah
+                dialog.cont.pane(t -> {
 
-                // sub teks biar lebih hidup
-                dialog.cont.add("[lightgray]System initialized successfully[]")
-                    .pad(5f)
-                    .row();
+                    t.defaults().pad(5);
 
-                // tombol
-                dialog.cont.button("OK", dialog::hide)
-                    .size(120f, 50f)
-                    .padTop(10f);
+                    // judul kecil
+                    t.add("[lightgray]==== Info Mod ==== []")
+                        .row();
+
+                    // judul utama
+                    t.add("[accent]Init Prosesing Core[]")
+                        .padTop(10)
+                        .row();
+
+                    // isi
+                    t.add("System initialized successfully")
+                        .padTop(10)
+                        .row();
+
+                    // tombol
+                    t.button("OK", dialog::hide)
+                        .size(120f, 50f)
+                        .padTop(15);
+
+                }).width(300f).center();
 
                 dialog.show();
             });
