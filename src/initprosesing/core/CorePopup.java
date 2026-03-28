@@ -17,20 +17,22 @@ public class CorePopup {
         Table card = new Table();
 
         card.setBackground(
-            new PopDialog(14f, new Color(0f, 0f, 0f, 0.9f)) // lebih solid
+            new PopDialog(14f, new Color(0f, 0f, 0f, 0.9f))
         );
 
-        card.margin(12); // 🔥 biar isi gak mepet
-        card.defaults().pad(4).growX();
+        card.margin(12);
+        card.defaults().pad(4);
 
         // ===== TITLE =====
         card.add("[lightgray]==== Info Mod ==== []")
             .center()
+            .growX()
             .row();
 
         card.add("[accent]Init Prosesing Core[]")
-            .padBottom(6)
             .center()
+            .growX()
+            .padBottom(6)
             .row();
 
         // ===== INFO SECTION =====
@@ -47,10 +49,15 @@ public class CorePopup {
         info.add("[gray]Purpose:[]");
         info.add("[white]Learning Modding Java[]").row();
 
-        card.add(info).left().row();
+        card.add(info)
+            .left()
+            .growX()
+            .row();
 
         // ===== SEPARATOR =====
-        card.add("[darkgray]---------------------------")
+        card.add()
+            .height(2)
+            .growX()
             .padTop(6)
             .padBottom(6)
             .row();
@@ -74,9 +81,12 @@ public class CorePopup {
             .width(280)
             .row();
 
-        card.add(links).left().row();
+        card.add(links)
+            .left()
+            .growX()
+            .row();
 
-        // ===== BUTTON (WITH ANIMATION CLOSE) =====
+        // ===== BUTTON =====
         card.button("[accent]Close[]", () -> {
 
             // animasi keluar
@@ -90,11 +100,12 @@ public class CorePopup {
 
         })
         .size(120, 45)
-        .padTop(10);
+        .padTop(10)
+        .center();
 
         // ===== ROOT ADD =====
         root.add(card)
-            .width(340) // 🔥 batas biar wrap jalan
+            .width(340)
             .pad(10);
 
         // ===== ANIMASI MASUK =====
