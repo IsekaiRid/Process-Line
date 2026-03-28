@@ -36,7 +36,7 @@ public class CorePopup {
         // ===== INFO SECTION =====
         Table info = new Table();
         info.left();
-        info.defaults().pad(2).left();
+        info.defaults().pad(5);
 
         info.add("[gray]Status:[]");
         info.add("[green]Active[]").row();

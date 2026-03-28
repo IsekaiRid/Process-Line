@@ -2,7 +2,7 @@ package initprosesing;
 
 import mindustry.mod.*;
 import arc.util.*;
-// import initprosesing.core.CoreUI;
+import initprosesing.core.CoreMenuBackground;
 import initprosesing.core.CoreHUD;
 
 public class InitProsesingCore extends Mod {
@@ -13,7 +13,7 @@ public class InitProsesingCore extends Mod {
 
     @Override
     public void loadContent(){
-    Log.info("Loading InitProsesingCore content...");
+    CoreMenuBackground.init();
     CoreHUD.init();
     }
 }
