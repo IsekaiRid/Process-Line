@@ -1,6 +1,7 @@
 package initprosesing.core;
 
 import arc.*;
+import arc.files.Fi;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.scene.style.TextureRegionDrawable;
@@ -15,7 +16,7 @@ public class CoreMenuBackground {
     static int index = 0;
     static float timer = 0f;
 
-    static float speed = 0.10f; // 🔥 atur kecepatan (lebih besar = lebih lambat)
+    static float speed = 0.10f;
 
     public static void init(){
 
@@ -25,13 +26,14 @@ public class CoreMenuBackground {
 
                 Log.info("=== INIT MENU BACKGROUND ===");
 
-                int total = 99; // ⚠️ sesuaikan dengan jumlah file kamu
+                int total = 99; // sesuaikan jumlah file
                 frames = new TextureRegion[total];
 
                 // ===== LOAD FRAME =====
                 for(int i = 0; i < total; i++){
 
-                    String name = String.format("bg/set (%03d)", i + 1);
+                    // 🔥 SESUAI FILE KAMU: set (1).png
+                    String name = String.format("bg/set-(%d)", i + 1);
 
                     TextureRegion region = Core.atlas.find(name);
 
@@ -44,22 +46,25 @@ public class CoreMenuBackground {
                     frames[i] = region;
                 }
 
-                Log.info("=== LIST SEMUA ATLAS ===");
-
-    Core.atlas.getRegions().each(r -> {
-        if(r.name.contains("bg")){
-            Log.info("FOUND: " + r.name);
-        }
-    });
+                // ===== DEBUG ATLAS =====
+                Log.info("=== LIST ATLAS (bg) ===");
+                Core.atlas.getRegions().each(r -> {
+                    if(r.name.contains("bg")){
+                        Log.info("FOUND: " + r.name);
+                    }
+                });
 
                 // ===== TEST SATU FRAME =====
-                TextureRegion test = Core.atlas.find("bg/ezgif-frame-001.png");
+                TextureRegion test = Core.atlas.find("bg/set-(1)");
 
                 if(test == null || !test.found()){
                     Log.err("🚨 TEST GAGAL: frame pertama tidak kebaca!");
                 }else{
                     Log.info("🔥 TEST BERHASIL: frame pertama OK!");
                 }
+
+                // ===== LOG ISI ASSETS =====
+                logAssets();
 
                 // ===== BUAT BACKGROUND =====
                 Image bg = new Image();
@@ -68,7 +73,7 @@ public class CoreMenuBackground {
                 Vars.ui.menuGroup.addChild(bg);
                 bg.toBack();
 
-                // ===== ANIMASI LOOP =====
+                // ===== ANIMASI =====
                 Events.run(EventType.Trigger.update, () -> {
 
                     timer += Time.delta;
@@ -87,8 +92,35 @@ public class CoreMenuBackground {
                 });
 
                 Log.info("=== BACKGROUND READY ===");
-
             });
         });
+    }
+
+    // ===== FUNCTION LOG ASSETS =====
+    public static void logAssets(){
+        Core.app.post(() -> {
+
+            Log.info("=== LIST FILE ASSETS ===");
+
+            Fi assets = Core.files.internal("assets");
+
+            if(!assets.exists()){
+                Log.err("❌ Folder assets tidak ditemukan!");
+                return;
+            }
+
+            listFiles(assets, "assets/");
+        });
+    }
+
+    public static void listFiles(Fi dir, String prefix){
+        for(Fi f : dir.list()){
+            if(f.isDirectory()){
+                Log.info("📁 " + prefix + f.name());
+                listFiles(f, prefix + f.name() + "/");
+            }else{
+                Log.info("📄 " + prefix + f.name());
+            }
+        }
     }
 }
