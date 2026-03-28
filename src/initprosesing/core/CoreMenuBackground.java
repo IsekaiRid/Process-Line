@@ -31,7 +31,7 @@ public class CoreMenuBackground {
                 // ===== LOAD FRAME =====
                 for(int i = 0; i < total; i++){
 
-                    String name = String.format("bg/ezgif-frame-%03d.png", i + 1);
+                    String name = String.format("bg/set (%03d)", i + 1);
 
                     TextureRegion region = Core.atlas.find(name);
 
@@ -53,7 +53,7 @@ public class CoreMenuBackground {
     });
 
                 // ===== TEST SATU FRAME =====
-                TextureRegion test = Core.atlas.find("bg/ezgif-frame-001");
+                TextureRegion test = Core.atlas.find("bg/ezgif-frame-001.png");
 
                 if(test == null || !test.found()){
                     Log.err("🚨 TEST GAGAL: frame pertama tidak kebaca!");
