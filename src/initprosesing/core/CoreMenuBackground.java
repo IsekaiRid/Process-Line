@@ -1,7 +1,7 @@
 package initprosesing.core;
 
 import arc.*;
-import arc.util.*;
+import arc.util.Time;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.scene.style.TextureRegionDrawable;
@@ -14,42 +14,57 @@ public class CoreMenuBackground {
     static int index = 0;
     static float timer = 0f;
 
-    static float speed = 0.08f; // 🔥 kecepatan animasi (kecil = lebih cepat)
+    static float speed = 0.08f; // 🔥 atur kecepatan animasi
 
     public static void init(){
 
-        int total = 99;
-        frames = new TextureRegion[total];
+        // ✅ tunggu UI siap
+        Events.on(EventType.ClientLoadEvent.class, e -> {
 
-        // ===== LOAD FRAME =====
-        for(int i = 0; i < total; i++){
-            String name = String.format("bg/ezgif-frame-%03d", i + 1);
-            frames[i] = Core.atlas.find(name);
-        }
+            Log.info("INIT MENU BACKGROUND");
 
-        // ===== IMAGE BACKGROUND =====
-        Image bg = new Image(frames[0]);
-        bg.setFillParent(true);
+            int total = 99;
+            frames = new TextureRegion[total];
 
-        // masuk ke menu
-        Vars.ui.menuGroup.addChild(bg);
-        bg.toBack(); // 🔥 biar di paling belakang
+            // ===== LOAD FRAME =====
+            for(int i = 0; i < total; i++){
+                String name = String.format("bg/ezgif-frame-%03d", i + 1);
 
-        // ===== LOOP ANIMASI =====
-        Events.run(EventType.Trigger.update, () -> {
+                TextureRegion region = Core.atlas.find(name);
 
-            timer += Time.delta;
-
-            if(timer >= speed){
-                timer = 0f;
-
-                index++;
-                if(index >= frames.length){
-                    index = 0;
+                if(region == null){
+                    Log.err("Frame tidak ditemukan: " + name);
                 }
 
-                bg.setDrawable(new TextureRegionDrawable(frames[index]));
+                frames[i] = region;
             }
+
+            // ===== BUAT IMAGE BACKGROUND =====
+            Image bg = new Image(frames[0]);
+            bg.setFillParent(true);
+
+            // 🔥 masuk ke main menu
+            Vars.ui.menuGroup.addChild(bg);
+            bg.toBack();
+
+            // ===== LOOP ANIMASI =====
+            Events.run(EventType.Trigger.update, () -> {
+
+                timer += Time.delta;
+
+                if(timer >= speed){
+                    timer = 0f;
+
+                    index++;
+                    if(index >= frames.length){
+                        index = 0;
+                    }
+
+                    if(frames[index] != null){
+                        bg.setDrawable(new TextureRegionDrawable(frames[index]));
+                    }
+                }
+            });
         });
     }
 }
