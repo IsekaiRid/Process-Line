@@ -18,55 +18,67 @@ public class CoreMenuBackground {
 
     static float speed = 0.08f; // 🔥 atur kecepatan animasi
 
+ public class CoreMenuBackground {
+
+    static TextureRegion[] frames;
+    static int index = 0;
+    static float timer = 0f;
+
+    static float speed = 0.08f;
+
     public static void init(){
 
-        // ✅ tunggu UI siap
         Events.on(EventType.ClientLoadEvent.class, e -> {
 
-            Log.info("INIT MENU BACKGROUND");
+            Core.app.post(() -> { // 🔥 pastikan atlas sudah ready
 
-            int total = 99;
-            frames = new TextureRegion[total];
+                Log.info("INIT MENU BACKGROUND");
 
-            // ===== LOAD FRAME =====
-            for(int i = 0; i < total; i++){
-                String name = String.format("bg/ezgif-frame-%03d", i + 1);
+                int total = 99;
+                frames = new TextureRegion[total];
 
-                TextureRegion region = Core.atlas.find(name);
+                // ===== LOAD FRAME =====
+                for(int i = 0; i < total; i++){
+                    String name = String.format("bg/ezgif-frame-%03d", i + 1);
 
-                if(region == null){
-                    Log.err("Frame tidak ditemukan: " + name);
-                }
+                    TextureRegion region = Core.atlas.find(name);
 
-                frames[i] = region;
-            }
-
-            // ===== BUAT IMAGE BACKGROUND =====
-            Image bg = new Image(frames[0]);
-            bg.setFillParent(true);
-
-            // 🔥 masuk ke main menu
-            Vars.ui.menuGroup.addChild(bg);
-            bg.toBack();
-
-            // ===== LOOP ANIMASI =====
-            Events.run(EventType.Trigger.update, () -> {
-
-                timer += Time.delta;
-
-                if(timer >= speed){
-                    timer = 0f;
-
-                    index++;
-                    if(index >= frames.length){
-                        index = 0;
+                    if(region == null || region.found() == false){
+                        Log.err("❌ Frame tidak ditemukan: " + name);
+                    }else{
+                        Log.info("✅ Loaded: " + name);
                     }
 
-                    if(frames[index] != null){
-                        bg.setDrawable(new TextureRegionDrawable(frames[index]));
-                    }
+                    frames[i] = region;
                 }
+
+                // ===== IMAGE =====
+                Image bg = new Image();
+                bg.setFillParent(true);
+
+                Vars.ui.menuGroup.addChild(bg);
+                bg.toBack();
+
+                // ===== LOOP =====
+                Events.run(EventType.Trigger.update, () -> {
+
+                    timer += Time.delta;
+
+                    if(timer >= speed){
+                        timer = 0f;
+
+                        index = (index + 1) % frames.length;
+
+                        TextureRegion frame = frames[index];
+
+                        if(frame != null && frame.found()){
+                            bg.setDrawable(new TextureRegionDrawable(frame));
+                        }
+                    }
+                });
+
             });
         });
     }
+}
 }
