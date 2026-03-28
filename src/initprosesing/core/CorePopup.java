@@ -26,12 +26,10 @@ public class CorePopup {
         // ===== TITLE =====
         card.add("[lightgray]==== Info Mod ==== []")
             .center()
-            .growX()
             .row();
 
         card.add("[accent]Init Prosesing Core[]")
             .center()
-            .growX()
             .padBottom(6)
             .row();
 
