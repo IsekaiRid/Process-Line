@@ -2,7 +2,6 @@ package initprosesing.core;
 
 import arc.*;
 import arc.files.Fi;
-import arc.graphics.g2d.AtlasRegion;  // 🔥 TAMBAHKAN INI
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.scene.style.TextureRegionDrawable;
@@ -34,7 +33,7 @@ public class CoreMenuBackground {
                 for (int i = 0; i < total; i++) {
                     // Coba beberapa format naming karena Mindustry atlas bisa beda-beda
                     String[] possibleNames = {
-                        String.format("bg/set (%d)", i + 1),      // "bg/set (1)"  ← kemungkinan besar ini
+                        String.format("bg/set (%d)", i + 1),      // "bg/set (1)"
                         String.format("bg/set(%d)", i + 1),       // "bg/set(1)"
                         String.format("bg/set-%d", i + 1),        // "bg/set-1"
                         String.format("bg/set_%d", i + 1),        // "bg/set_1"
@@ -63,8 +62,8 @@ public class CoreMenuBackground {
 
                 Log.info("📊 Total frames loaded: " + loadedCount + "/" + total);
 
-                // ===== DEBUG ATLAS SEMUA REGION =====
-                debugAtlas();
+                // ===== DEBUG: Cek beberapa nama yang mungkin =====
+                debugPossibleNames();
 
                 // ===== BUAT BACKGROUND =====
                 if (loadedCount > 0) {
@@ -151,25 +150,32 @@ public class CoreMenuBackground {
         }
     }
 
-    // 🔥 DEBUG: List semua region di atlas yang mengandung "bg"
-    public static void debugAtlas() {
-        Log.info("=== DEBUG ATLAS (semua region dengan 'bg') ===");
+    // 🔥 DEBUG: Cek nama-nama yang mungkin di atlas
+    public static void debugPossibleNames() {
+        Log.info("=== DEBUG POSSIBLE ATLAS NAMES ===");
         
-        int count = 0;
-        // 🔥 PERBAIKAN: Gunakan AtlasRegion bukan TextureRegion
-        for (AtlasRegion region : Core.atlas.getRegions()) {
-            if (region.name != null && region.name.toLowerCase().contains("bg")) {
-                Log.info("🎯 ATLAS: " + region.name + " | found=" + region.found() + 
-                         " | width=" + region.width + " | height=" + region.height);
-                if (++count >= 20) {
-                    Log.info("... dan " + (Core.atlas.getRegions().size - count) + " region lain dengan 'bg'");
-                    break;
-                }
+        String[] testNames = {
+            "bg/set (1)",
+            "bg/set(1)", 
+            "bg/set-1",
+            "bg/set_1",
+            "bg/set 1",
+            "bg-set-1",
+            "bg_set_1",
+            "bgset1",
+            "set (1)",
+            "set-1",
+            "set_1"
+        };
+        
+        for (String name : testNames) {
+            TextureRegion region = Core.atlas.find(name);
+            boolean found = region != null && region.found();
+            if (found) {
+                Log.info("🎯 FOUND: '" + name + "' ✓");
+            } else {
+                Log.info("❌ NOT FOUND: '" + name + "'");
             }
-        }
-        
-        if (count == 0) {
-            Log.warn("⚠️ Tidak ada region dengan 'bg' di atlas!");
         }
     }
 }
