@@ -1,6 +1,8 @@
 package initprosesing.core;
 
 import arc.*;
+import mindustry.mod.*;
+import arc.util.*;
 import arc.util.Time;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
