@@ -3,9 +3,7 @@ package initprosesing.core;
 import arc.*;
 import arc.scene.actions.Actions;
 import arc.scene.ui.layout.*;
-import mindustry.ui.Styles;
 import arc.graphics.Color;
-import initprosesing.core.PopDialog;
 
 public class CorePopup {
 
@@ -15,36 +13,94 @@ public class CorePopup {
         root.setFillParent(true);
         root.center();
 
+        // ===== CARD =====
         Table card = new Table();
-       card.setBackground(
-    new PopDialog(12f, Color.valueOf("1e1e1e"), 300f, 800f)
-    );
+
+        card.setBackground(
+            new PopDialog(14f, new Color(0f, 0f, 0f, 0.75f))
+        );
 
         card.defaults().pad(6);
 
-        card.add("[lightgray]==== Info Mod ==== []").row();
+        // ===== TITLE =====
+        card.add("[lightgray]==== Info Mod ==== []")
+            .padBottom(4)
+            .row();
 
         card.add("[accent]Init Prosesing Core[]")
-            .padTop(5)
+            .padBottom(8)
             .row();
 
-        card.add("Status: [green]Active[]")
-            .padTop(5)
+        // ===== INFO SECTION =====
+        Table info = new Table();
+
+        info.left();
+
+        info.add("[gray]Status: []")
+            .left();
+
+        info.add("[green]Active[]")
+            .left()
             .row();
 
-        card.button("Close", root::remove)
-            .size(100, 40)
+        info.add("[gray]Type: []")
+            .left();
+
+        info.add("[accent]Java Mod[]")
+            .left()
+            .row();
+
+        info.add("[gray]Purpose: []")
+            .left();
+
+        info.add("[white]Learning Modding Java[]")
+            .left()
+            .row();
+
+        card.add(info).left().row();
+
+        // ===== SEPARATOR =====
+        card.add("[darkgray]------------------------")
+            .padTop(6)
+            .padBottom(6)
+            .row();
+
+        // ===== LINKS =====
+        Table links = new Table();
+        links.left();
+
+        links.add("[gray]Github:[]").left().row();
+
+        links.add("[sky]github.com/IsekaiRid/Process-Line[]")
+            .left()
+            .row();
+
+        links.add("[gray]YouTube:[]")
+            .padTop(4)
+            .left()
+            .row();
+
+        links.add("[orange]youtube.com/@ridhwanrplwibu[]")
+            .left()
+            .row();
+
+        card.add(links).left().row();
+
+        // ===== BUTTON =====
+        card.button("[accent]Close[]", root::remove)
+            .size(120, 45)
             .padTop(10);
 
-        root.add(card).pad(10);
+        // ===== ROOT ADD =====
+        root.add(card).width(320).pad(10);
 
-        // animasi
+        // ===== ANIMATION =====
         card.actions(
             Actions.alpha(0f),
-            Actions.moveBy(0, -40),
+            Actions.scaleTo(0.9f, 0.9f),
             Actions.parallel(
                 Actions.fadeIn(0.3f),
-                Actions.moveBy(0, 40, 0.3f)
+                Actions.scaleTo(1f, 1f, 0.3f)
             )
         );
 
