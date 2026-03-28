@@ -1,8 +1,8 @@
 #the mod name as displayed in-game
-displayName: "Java Mod Template"
+"displayName": "Init Prosesing Core"
 
 #the internal name of your mod
-name: "example-java-mod"
+"name": "init-prosesing-core"
 
 #your name
 author: "You"

@@ -6,6 +6,7 @@ public class InitProsesingCore extends Mod {
 
     public InitProsesingCore(){
         System.out.println("InitProsesingCore Loaded!");
+        Log.info("=== INIT PROSESING CORE LOADED ===");
     }
 
     @Override
