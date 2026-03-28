@@ -19,10 +19,21 @@ public class CoreDrawable implements Drawable {
         CoreDraw.softRect(x, y, width, height, color);
     }
 
+    // ===== SIZE =====
     @Override public float getMinWidth(){ return 0; }
     @Override public float getMinHeight(){ return 0; }
 
-    // 🔥 WAJIB DI TAMBAH
     @Override public void setMinWidth(float width){}
     @Override public void setMinHeight(float height){}
+
+    // ===== PADDING =====
+    @Override public float getTopHeight(){ return 0; }
+    @Override public float getBottomHeight(){ return 0; }
+    @Override public float getLeftWidth(){ return 0; }
+    @Override public float getRightWidth(){ return 0; }
+
+    @Override public void setTopHeight(float height){}
+    @Override public void setBottomHeight(float height){}
+    @Override public void setLeftWidth(float width){}
+    @Override public void setRightWidth(float width){}
 }
