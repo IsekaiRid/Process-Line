@@ -2,12 +2,14 @@ package initprosesing.core;
 
 import arc.*;
 import arc.files.Fi;
+import arc.graphics.Texture;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.scene.style.TextureRegionDrawable;
 import arc.util.*;
 import mindustry.Vars;
 import mindustry.game.EventType;
+import mindustry.mod.Mods;
 
 public class CoreMenuBackground {
 
@@ -16,61 +18,39 @@ public class CoreMenuBackground {
     static float timer = 0f;
     static float speed = 0.10f;
     static Image bgImage;
+    static boolean useFileLoading = false;
 
     public static void init() {
         Events.on(EventType.ClientLoadEvent.class, e -> {
             Core.app.post(() -> {
                 Log.info("=== INIT MENU BACKGROUND ===");
 
-                // 🔥 DEBUG: Log semua directory mod
-                debugModDirectory();
+                // 🔥 CARI ROOT MOD
+                Fi modRoot = findModRoot();
+                debugModDirectory(modRoot);
 
                 int total = 99;
                 frames = new TextureRegion[total];
                 int loadedCount = 0;
 
-                // ===== LOAD FRAME =====
-                for (int i = 0; i < total; i++) {
-                    // Coba beberapa format naming karena Mindustry atlas bisa beda-beda
-                    String[] possibleNames = {
-                        String.format("bg/set (%d)", i + 1),      // "bg/set (1)"
-                        String.format("bg/set(%d)", i + 1),       // "bg/set(1)"
-                        String.format("bg/set-%d", i + 1),        // "bg/set-1"
-                        String.format("bg/set_%d", i + 1),        // "bg/set_1"
-                    };
+                // STRATEGI 1: Atlas (jika sprite sudah dipack)
+                Log.info("=== STRATEGI 1: Load dari Atlas ===");
+                loadedCount = loadFromAtlas(total);
 
-                    TextureRegion region = null;
-                    String foundName = null;
-
-                    for (String name : possibleNames) {
-                        region = Core.atlas.find(name);
-                        if (region != null && region.found()) {
-                            foundName = name;
-                            break;
-                        }
-                    }
-
-                    if (region != null && region.found()) {
-                        frames[i] = region;
-                        loadedCount++;
-                        if (i < 3) Log.info("✅ Loaded frame " + (i + 1) + ": " + foundName);
-                    } else {
-                        frames[i] = null;
-                        if (i < 5) Log.err("❌ Frame " + (i + 1) + " tidak ditemukan di atlas");
-                    }
+                // STRATEGI 2: File langsung (bypass atlas)
+                if (loadedCount == 0 && modRoot != null) {
+                    Log.info("=== STRATEGI 2: Load dari File (Bypass Atlas) ===");
+                    loadedCount = loadFromFiles(modRoot, total);
+                    useFileLoading = true;
                 }
 
                 Log.info("📊 Total frames loaded: " + loadedCount + "/" + total);
 
-                // ===== DEBUG: Cek beberapa nama yang mungkin =====
-                debugPossibleNames();
-
-                // ===== BUAT BACKGROUND =====
+                // Setup background dan animasi...
                 if (loadedCount > 0) {
                     bgImage = new Image();
                     bgImage.setFillParent(true);
                     
-                    // Set frame pertama yang valid
                     for (int i = 0; i < frames.length; i++) {
                         if (frames[i] != null && frames[i].found()) {
                             bgImage.setDrawable(new TextureRegionDrawable(frames[i]));
@@ -82,16 +62,11 @@ public class CoreMenuBackground {
                     Vars.ui.menuGroup.addChildAt(0, bgImage);
                     bgImage.toBack();
 
-                    // ===== ANIMASI =====
                     Events.run(EventType.Trigger.update, () -> {
                         if (bgImage == null) return;
-                        
                         timer += Time.delta;
-
                         if (timer >= speed) {
                             timer = 0f;
-
-                            // Cari frame berikutnya yang valid
                             int attempts = 0;
                             do {
                                 index = (index + 1) % frames.length;
@@ -104,78 +79,77 @@ public class CoreMenuBackground {
                         }
                     });
 
-                    Log.info("🎬 Background animation started");
+                    Log.info("🎬 Animation started (Mode: " + (useFileLoading ? "FILE" : "ATLAS") + ")");
                 } else {
                     Log.err("🚨 GAGAL: Tidak ada frame yang bisa di-load!");
                 }
-
-                Log.info("=== BACKGROUND READY ===");
             });
         });
     }
 
-    // 🔥 DEBUG: List semua file di directory mod
-    public static void debugModDirectory() {
-        Log.info("=== DEBUG MOD DIRECTORY ===");
-        
-        // Coba beberapa path yang mungkin
-        String[] paths = {
-            "",                          // Root
-            "assets",                    // assets/
-            "sprites",                   // sprites/
-            "sprites/bg",                // sprites/bg/
-            "assets/sprites",            // assets/sprites/
-            "assets/sprites/bg"          // assets/sprites/bg/
-        };
+    static Fi findModRoot() {
+        if (Vars.mods == null) return null;
+        for (Mods.LoadedMod mod : Vars.mods.list()) {
+            if (mod.name.toLowerCase().contains("init") || mod.name.toLowerCase().contains("prosesing")) {
+                Log.info("✅ Mod found: " + mod.file.absolutePath());
+                return mod.file;
+            }
+        }
+        return null;
+    }
 
-        for (String path : paths) {
-            Fi dir = Core.files.internal(path);
-            Log.info("📂 Checking: '" + path + "' exists=" + dir.exists() + " isDir=" + dir.isDirectory());
-            
-            if (dir.exists() && dir.isDirectory()) {
-                Fi[] files = dir.list();
-                Log.info("   └─ Found " + files.length + " items");
-                
-                // List max 10 items
-                int count = 0;
-                for (Fi f : files) {
-                    String type = f.isDirectory() ? "📁" : "📄";
-                    Log.info("      " + type + " " + f.name());
-                    if (++count >= 10) {
-                        Log.info("      ... dan " + (files.length - 10) + " lainnya");
-                        break;
-                    }
+    static int loadFromAtlas(int total) {
+        int loaded = 0;
+        for (int i = 0; i < total; i++) {
+            String[] names = {
+                String.format("bg/set (%d)", i + 1),
+                String.format("bg/set-%d", i + 1),
+                String.format("bg/set_%d", i + 1)
+            };
+            for (String name : names) {
+                TextureRegion r = Core.atlas.find(name);
+                if (r != null && r.found()) {
+                    frames[i] = r;
+                    loaded++;
+                    if (i < 3) Log.info("✅ Atlas: " + name);
+                    break;
                 }
             }
         }
+        return loaded;
     }
 
-    // 🔥 DEBUG: Cek nama-nama yang mungkin di atlas
-    public static void debugPossibleNames() {
-        Log.info("=== DEBUG POSSIBLE ATLAS NAMES ===");
-        
-        String[] testNames = {
-            "bg/set (1)",
-            "bg/set(1)", 
-            "bg/set-1",
-            "bg/set_1",
-            "bg/set 1",
-            "bg-set-1",
-            "bg_set_1",
-            "bgset1",
-            "set (1)",
-            "set-1",
-            "set_1"
+    static int loadFromFiles(Fi modRoot, int total) {
+        Fi[] paths = {
+            modRoot.child("assets/sprites/bg"),
+            modRoot.child("sprites/bg"),
+            modRoot.child("assets/bg")
         };
         
-        for (String name : testNames) {
-            TextureRegion region = Core.atlas.find(name);
-            boolean found = region != null && region.found();
-            if (found) {
-                Log.info("🎯 FOUND: '" + name + "' ✓");
-            } else {
-                Log.info("❌ NOT FOUND: '" + name + "'");
+        Fi bgFolder = null;
+        for (Fi f : paths) {
+            if (f.exists()) { bgFolder = f; break; }
+        }
+        
+        if (bgFolder == null) return 0;
+
+        int loaded = 0;
+        for (int i = 0; i < total; i++) {
+            Fi file = bgFolder.child(String.format("set (%d).png", i + 1));
+            if (file.exists()) {
+                frames[i] = new TextureRegion(new Texture(file));
+                loaded++;
+                if (i < 3) Log.info("✅ File: set (" + (i+1) + ").png");
             }
+        }
+        return loaded;
+    }
+
+    static void debugModDirectory(Fi root) {
+        if (root == null) return;
+        Log.info("📦 Mod: " + root.absolutePath());
+        for (Fi f : root.list()) {
+            Log.info("   " + (f.isDirectory() ? "📁" : "📄") + " " + f.name());
         }
     }
 }
