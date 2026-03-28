@@ -16,8 +16,9 @@ public class CoreDrawable implements Drawable {
     // ===== DRAW BASIC =====
     @Override
     public void draw(float x, float y, float width, float height){
-        CoreDraw.shadow(x, y, width, height);
-        CoreDraw.softRect(x, y, width, height, color);
+       Color drawColor = color.cpy();
+    CoreDraw.shadow(x, y, width, height, radius);
+    CoreDraw.roundedRect(x, y, width, height, radius, drawColor);
     }
 
     // ===== DRAW ADVANCED (WAJIB!) =====

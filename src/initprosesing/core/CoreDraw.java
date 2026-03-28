@@ -48,16 +48,30 @@ public class CoreDraw {
         rect(x + w - 4, y + 4, 4, h - 8, color);
     }
 
-    // ✨ shadow sederhana
-    public static void shadow(float x, float y, float w, float h){
-        Draw.color(0f, 0f, 0f, 0.4f);
+    public static void roundedRect(float x, float y, float w, float h, float r, Color color){
 
-        Fill.rect(
-            x + w/2f + 3,
-            y + h/2f - 3,
-            w,
-            h
-        );
+        Draw.color(color);
+
+        // center rect
+        Fill.rect(x + w/2f, y + h/2f, w - r*2, h);
+
+        // kiri kanan
+        Fill.rect(x + r/2f, y + h/2f, r, h - r*2);
+        Fill.rect(x + w - r/2f, y + h/2f, r, h - r*2);
+
+        // 4 sudut (pakai circle kecil)
+        Fill.circle(x + r, y + r, r);
+        Fill.circle(x + w - r, y + r, r);
+        Fill.circle(x + r, y + h - r, r);
+        Fill.circle(x + w - r, y + h - r, r);
+
+        Draw.color();
+    }
+
+   public static void shadow(float x, float y, float w, float h, float r){
+        Draw.color(0f, 0f, 0f, 0.25f);
+
+        roundedRect(x + 4, y - 4, w, h, r, new Color(0f,0f,0f,0.25f));
 
         Draw.color();
     }
