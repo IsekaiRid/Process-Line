@@ -17,50 +17,40 @@ public class CorePopup {
         Table card = new Table();
 
         card.setBackground(
-            new PopDialog(14f, new Color(0f, 0f, 0f, 0.75f))
+            new PopDialog(14f, new Color(0f, 0f, 0f, 0.9f)) // lebih solid
         );
 
-        card.defaults().pad(6);
+        card.margin(12); // 🔥 biar isi gak mepet
+        card.defaults().pad(4).growX();
 
         // ===== TITLE =====
         card.add("[lightgray]==== Info Mod ==== []")
-            .padBottom(4)
+            .center()
             .row();
 
         card.add("[accent]Init Prosesing Core[]")
-            .padBottom(8)
+            .padBottom(6)
+            .center()
             .row();
 
         // ===== INFO SECTION =====
         Table info = new Table();
-
         info.left();
+        info.defaults().pad(2).left();
 
-        info.add("[gray]Status: []")
-            .left();
+        info.add("[gray]Status:[]");
+        info.add("[green]Active[]").row();
 
-        info.add("[green]Active[]")
-            .left()
-            .row();
+        info.add("[gray]Type:[]");
+        info.add("[accent]Java Mod[]").row();
 
-        info.add("[gray]Type: []")
-            .left();
-
-        info.add("[accent]Java Mod[]")
-            .left()
-            .row();
-
-        info.add("[gray]Purpose: []")
-            .left();
-
-        info.add("[white]Learning Modding Java[]")
-            .left()
-            .row();
+        info.add("[gray]Purpose:[]");
+        info.add("[white]Learning Modding Java[]").row();
 
         card.add(info).left().row();
 
         // ===== SEPARATOR =====
-        card.add("[darkgray]------------------------")
+        card.add("[darkgray]---------------------------")
             .padTop(6)
             .padBottom(6)
             .row();
@@ -68,36 +58,49 @@ public class CorePopup {
         // ===== LINKS =====
         Table links = new Table();
         links.left();
+        links.defaults().pad(2).left();
 
-        links.add("[gray]Github:[]").left().row();
+        links.add("[gray]Github:[]").row();
 
-        links.add("[sky]github.com/IsekaiRid/Process-Line[]")
-            .left()
+        links.labelWrap("[sky]github.com/IsekaiRid/Process-Line[]")
+            .width(280)
             .row();
 
         links.add("[gray]YouTube:[]")
             .padTop(4)
-            .left()
             .row();
 
-        links.add("[orange]youtube.com/@ridhwanrplwibu[]")
-            .left()
+        links.labelWrap("[orange]youtube.com/@ridhwanrplwibu[]")
+            .width(280)
             .row();
 
         card.add(links).left().row();
 
-        // ===== BUTTON =====
-        card.button("[accent]Close[]", root::remove)
-            .size(120, 45)
-            .padTop(10);
+        // ===== BUTTON (WITH ANIMATION CLOSE) =====
+        card.button("[accent]Close[]", () -> {
+
+            // animasi keluar
+            card.actions(
+                Actions.parallel(
+                    Actions.fadeOut(0.25f),
+                    Actions.scaleTo(0.9f, 0.9f, 0.25f)
+                ),
+                Actions.run(root::remove)
+            );
+
+        })
+        .size(120, 45)
+        .padTop(10);
 
         // ===== ROOT ADD =====
-        root.add(card).width(320).pad(10);
+        root.add(card)
+            .width(340) // 🔥 batas biar wrap jalan
+            .pad(10);
 
-        // ===== ANIMATION =====
+        // ===== ANIMASI MASUK =====
         card.actions(
             Actions.alpha(0f),
-            Actions.scaleTo(0.9f, 0.9f),
+            Actions.scaleTo(0.8f, 0.8f),
             Actions.parallel(
                 Actions.fadeIn(0.3f),
                 Actions.scaleTo(1f, 1f, 0.3f)
