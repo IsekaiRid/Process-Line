@@ -15,14 +15,14 @@ public class CoreDrawable implements Drawable {
 
     @Override
     public void draw(float x, float y, float width, float height){
-
-        // shadow dulu
         CoreDraw.shadow(x, y, width, height);
-
-        // background
         CoreDraw.softRect(x, y, width, height, color);
     }
 
     @Override public float getMinWidth(){ return 0; }
     @Override public float getMinHeight(){ return 0; }
+
+    // 🔥 WAJIB DI TAMBAH
+    @Override public void setMinWidth(float width){}
+    @Override public void setMinHeight(float height){}
 }
