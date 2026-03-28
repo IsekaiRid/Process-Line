@@ -1,17 +1,20 @@
 package initprosesing;
 
 import mindustry.mod.*;
-import arc.util.Log;
+import arc.util.*;
+import initprosesing.core.CoreUI;
 
 public class InitProsesingCore extends Mod {
 
     public InitProsesingCore(){
-        System.out.println("InitProsesingCore Loaded!");
-        Log.info("=== INIT PROSESING CORE LOADED ===");
+        Log.info("=== InitProsesingCore Loaded ===");
     }
 
     @Override
     public void loadContent(){
-        System.out.println("Loading InitProsesingCore content...");
+        Log.info("Loading InitProsesingCore content...");
+
+        // panggil sistem core
+        CoreUI.init();
     }
 }
