@@ -2,7 +2,8 @@ package initprosesing;
 
 import mindustry.mod.*;
 import arc.util.*;
-import initprosesing.core.CoreUI;
+// import initprosesing.core.CoreUI;
+import initprosesing.core.CoreHUD;
 
 public class InitProsesingCore extends Mod {
 
@@ -15,6 +16,7 @@ public class InitProsesingCore extends Mod {
         Log.info("Loading InitProsesingCore content...");
 
         // panggil sistem core
-        CoreUI.init();
+        // CoreUI.init();
+        CoreHUD.init(); 
     }
 }
